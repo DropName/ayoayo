@@ -4,7 +4,7 @@ class Ayogame:
                       4,4,4,4,4,4]
         self.score = [0,0]
 
-    def move(self, hole):
+    def step(self, hole):
         # number of hole starting with 0 to 5
     
         stones = self.state[hole]
@@ -20,20 +20,30 @@ class Ayogame:
         last_hole = (hole + stones  + shift) % 12
         return last_hole
     
-    def round(self, player, hole):
+    def move(self, hole):
         # move till the capture
     
-        last_hole = self.move(hole)
+        last_hole = self.step(hole)
         while self.state[last_hole] > 1:
-            last_hole = self.move(last_hole)
-            
-        if last_hole < 6:
-            self.score[player-1] = self.state[11 - last_hole]
-            self.state[11 - last_hole] = 0
+            last_hole = self.step(last_hole)
 
         return last_hole
 
+    def capture(self, player, hole):
+        if hole < 6:
+            self.score[player-1] = self.state[11 - hole]
+            self.state[11 - hole] = 0
 
+            return True
+
+        else:
+            return False
+
+    
+    def switch(self):
+        self.state = self.state[6:] + self.state[:6]
+
+        return 0
 
 
 
