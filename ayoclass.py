@@ -31,7 +31,7 @@ class Ayogame:
 
     def capture(self, player, hole):
         if hole < 6:
-            self.score[player-1] = self.state[11 - hole]
+            self.score[player-1] += self.state[11 - hole]
             self.state[11 - hole] = 0
 
             return True
