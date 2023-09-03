@@ -1,12 +1,22 @@
 class Ayogame:
     def __init__(self):
+        """
+        state -- is a board configuration
+        score -- player score
+        """
         self.state = [4,4,4,4,4,4,
                       4,4,4,4,4,4]
         self.score = [0,0]
 
+    def __str__(self):
+        return str(self.state[6:][::-1]) + '\n' + str(self.state[:6])
+
     def step(self, hole):
-        # number of hole starting with 0 to 5
-    
+        """
+        does one iteration by taking all stones from 'hole' 
+        and dealing stones to the next holes
+        return the last hole number
+        """
         stones = self.state[hole]
         self.state[hole] = 0
         shift = 0
@@ -21,7 +31,10 @@ class Ayogame:
         return last_hole
     
     def move(self, hole):
-        # move till the capture
+        """
+        makes 'steps' until dealing the last stone to the empty hole
+        returns number of the last hole
+        """
     
         last_hole = self.step(hole)
         while self.state[last_hole] > 1:
@@ -30,6 +43,10 @@ class Ayogame:
         return last_hole
 
     def capture(self, player, hole):
+        """
+        captures stones, if they are on the opposite side
+        adds a score to the 'player'
+        """
         if hole < 6:
             self.score[player-1] += self.state[11 - hole]
             self.state[11 - hole] = 0
@@ -41,6 +58,9 @@ class Ayogame:
 
     
     def switch(self):
+        """
+        reverts board, so the second player becomes the first
+        """
         self.state = self.state[6:] + self.state[:6]
 
         return 0
