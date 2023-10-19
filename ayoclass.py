@@ -1,3 +1,5 @@
+import copy
+
 class Ayogame:
     def __init__(self):
         """
@@ -8,8 +10,10 @@ class Ayogame:
                       4,4,4,4,4,4]
         self.score = [0,0]
 
+
     def __str__(self):
         return str(self.state[6:][::-1]) + '\n' + str(self.state[:6])
+
 
     def step(self, hole):
         """
@@ -29,7 +33,8 @@ class Ayogame:
 
         last_hole = (hole + stones  + shift) % 12
         return last_hole
-    
+
+
     def move(self, hole):
         """
         makes 'steps' until dealing the last stone to the empty hole
@@ -41,6 +46,7 @@ class Ayogame:
             last_hole = self.step(last_hole)
 
         return last_hole
+
 
     def capture(self, player, hole):
         """
@@ -65,7 +71,36 @@ class Ayogame:
 
         return 0
 
+    def check_illegal(self, hole):
+        if self.state[hole] == 0 or hole > 5:
+            return False
+
+        a = copy.deepcopy(self)
+        last_hole = a.move(hole)
+        if a.capture(1, last_hole):
+            return True
+        elif a.state[6:][::-1] == [0]*6:
+            return False
+        else:
+            return True
 
 
+    def round(self, player, hole):
+         
+        last_hole = self.move(hole)
+        self.capture(player, last_hole)
+        self.switch()
+
+        return (player+1) % 2
+
+    def game_loud(self, player):
+         
+        print('The score is {}'.format(self.score))
+        print('Player {} turn:'.format(player+1))
+        print(self)
+        print('==========')
+
+
+        return player
 
 
